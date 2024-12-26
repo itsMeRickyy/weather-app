@@ -3,119 +3,94 @@ import { create } from "zustand";
 import { fetchWeatherInfo } from "~/services/fetchWeather";
 import type { Location, WeatherData } from "~/services/fetchWeather";
 import axios from "axios";
+import { detectUserLocation, searchLocation } from "utils/locationUtils";
 
 interface WeatherState {
-  locations: Location[];
+  // locations: Location[];
+  currentLocation: Location | null;
   weatherData: WeatherData[] | null;
   openSearch: boolean;
   setIsOpenSearch: (open: boolean) => void;
-  fetchWeatherData: () => Promise<void>;
+  fetchWeatherData: (location: Location) => Promise<void>;
   detectUserLocation: () => Promise<void>;
   userLocation: Location | null;
   locationError: string | null;
   searchLocation: (query: string) => Promise<void>;
   searchError: string | null;
+  isLoading: boolean;
 }
 
+// const apiKey = process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY;
+
 const useWeatherStore = create<WeatherState>((set, get) => ({
+  currentLocation: {
+    // Initial location WITH weather data
+    name: "Jakarta",
+    latitude: -6.2088,
+    longitude: 106.8456,
+  },
+
   locations: [
     { name: "Jakarta", latitude: -6.2088, longitude: 106.8456 },
     // ... other locations
   ],
   weatherData: null,
   openSearch: false,
+  setIsOpenSearch: open => set({ openSearch: open }),
   userLocation: null,
   locationError: null,
   searchError: null,
-
-  setIsOpenSearch: open => set({ openSearch: open }),
-  fetchWeatherData: async () => {
+  isLoading: false,
+  fetchWeatherData: async (location: Location) => {
+    const apiKey = import.meta.env.VITE_APP_API_KEY;
+    if (!apiKey) {
+      console.error("API key not found");
+      return;
+    }
     try {
-      const weatherData = await fetchWeatherInfo(get().locations, import.meta.env.VITE_WEATHER_API_KEY);
-      set({ weatherData });
+      const response = await fetchWeatherInfo([location], apiKey);
+      set({ weatherData: response, isLoading: false });
+      console.log("This is Weather Data", response);
     } catch (error) {
-      console.error("Error fetching weather data:", error);
+      console.error("Error fetch weather data:", error);
+      set({ weatherData: null, isLoading: false });
     }
   },
   detectUserLocation: async () => {
-    if (!navigator.geolocation) {
-      set({ locationError: "Geolocation is not supported by your browser." });
-      return;
-    }
-
-    set({ locationError: null }); // Clear any previous errors
-
-    try {
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-      });
-
-      const { latitude, longitude } = position.coords;
-
-      // Reverse geocoding to get the city name (using a third-party service)
-      try {
-        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`);
-        const data = await response.json();
-        const cityName = data.address?.city || data.address?.town || data.address?.village || "Unknown Location";
-        set({ userLocation: { name: cityName, latitude, longitude } });
-        set(state => ({ locations: [...state.locations, { name: cityName, latitude, longitude }] }));
-        get().fetchWeatherData();
-      } catch (reverseGeocodingError) {
-        console.error("Error reverse geocoding:", reverseGeocodingError);
-        set({ userLocation: { name: `Lat: ${latitude.toFixed(2)}, Lon: ${longitude.toFixed(2)}`, latitude, longitude } });
-        set(state => ({ locations: [...state.locations, { name: `Lat: ${latitude.toFixed(2)}, Lon: ${longitude.toFixed(2)}`, latitude, longitude }] }));
-        get().fetchWeatherData();
-      }
-    } catch (error: any) {
-      switch (error.code) {
-        case error.PERMISSION_DENIED:
-          set({ locationError: "User denied the request for Geolocation." });
-          break;
-        case error.POSITION_UNAVAILABLE:
-          set({ locationError: "Location information is unavailable." });
-          break;
-        case error.TIMEOUT:
-          set({ locationError: "The request to get user location timed out." });
-          break;
-        case error.UNKNOWN_ERROR:
-          set({ locationError: "An unknown error occurred." });
-          break;
-      }
-      console.error("Error getting user location:", error);
+    set({ locationError: null, currentLocation: null, isLoading: true, weatherData: null });
+    const location = await detectUserLocation();
+    if (location) {
+      set({ userLocation: location, currentLocation: location, isLoading: false });
+      get().fetchWeatherData(location);
+    } else {
+      set({ locationError: "Location not found", isLoading: false });
     }
   },
   searchLocation: async query => {
-    set({ searchError: null });
-    try {
-      const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${query}&format=jsonv2&limit=1`);
-      const data = response.data;
-
-      if (data.length > 0) {
-        const { lat, lon, display_name } = data[0];
-        const latitude = parseFloat(lat);
-        const longitude = parseFloat(lon);
-        set({ locations: [...get().locations, { name: display_name, latitude, longitude }] });
-        get().fetchWeatherData();
-      } else {
-        set({ searchError: "Location not found" });
-        console.error("Location not found");
-      }
-    } catch (error) {
-      set({ searchError: "Error searching location" });
-      console.error("Error searching location:", error);
+    set({ searchError: null, isLoading: true, weatherData: null });
+    const location = await searchLocation(query);
+    if (location) {
+      set({ currentLocation: location, isLoading: false });
+      get().fetchWeatherData(location);
+    } else {
+      set({ searchError: "Location not found", isLoading: false });
     }
   },
 }));
 
 // A custom hook to trigger the initial fetch in your component.
 export const useWeather = () => {
-  const { locations, fetchWeatherData, ...state } = useWeatherStore();
+  const { currentLocation, fetchWeatherData, ...state } = useWeatherStore();
 
   useEffect(() => {
-    fetchWeatherData();
-  }, [locations, fetchWeatherData]);
+    if (currentLocation) {
+      fetchWeatherData(currentLocation);
+    } else {
+      state.detectUserLocation();
+    }
+  }, [currentLocation, fetchWeatherData, state.detectUserLocation]);
 
-  return { ...state, locations };
+  return { ...state, currentLocation };
 };
 
 export default useWeatherStore;

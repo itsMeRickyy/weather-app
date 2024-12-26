@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import useWeatherStore, { useWeather } from "store/useWeatherDataStore";
 export function Welcome() {
-  const { weatherData, detectUserLocation, userLocation, locationError, searchError, searchLocation } = useWeatherStore();
+  const { weatherData, detectUserLocation, userLocation, locationError, searchError, searchLocation, fetchWeatherData } = useWeatherStore();
   const [searchQuery, setSearchQuery] = useState("");
-  const { locations } = useWeather();
+  const { currentLocation } = useWeather();
 
   const handleDetectLocation = async () => {
     await detectUserLocation();
@@ -23,34 +23,39 @@ export function Welcome() {
 
       <div>
         <button onClick={handleDetectLocation}>Detect Your Location</button>
-
-        {locationError && <p style={{ color: "red" }}>{locationError}</p>}
-
-        {userLocation && (
-          <p>
-            Your Location: {userLocation.name} (Lat: {userLocation.latitude}, Lon: {userLocation.longitude})
-          </p>
-        )}
-        {/* {locations.map(location => (
-          <div key={location.name}>{location.name}</div>
-        ))} */}
       </div>
       <div>
         <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder={"Search location..."} />
         <button onClick={handleSearchLocation}>Search</button>
         {searchError && <p style={{ color: "red" }}>{searchError}</p>}
       </div>
-      {locations.map(location => (
-        <div key={location.name}>{location.name}</div>
-      ))}
-      {weatherData?.map((data, index) => (
-        <div key={index}>
-          <p>Location: {data.name}</p>
-          <p>Temperature: {data.main.temp}°C</p>
-          <p>Humidity: {data.main.humidity}%</p>
-          <p>Weather: {data.weather[0].description}</p>
+      {currentLocation && (
+        <div>
+          <p>
+            Current Locationn: {currentLocation.name} (Lat: {currentLocation.latitude}, Lon: {currentLocation.longitude})
+          </p>
+          <p>Temperature: {currentLocation.temperature}</p>
         </div>
-      ))}
+      )}
+
+      {weatherData && (
+        <div>
+          <p>Temperature: {weatherData?.main.temp}</p>
+          <p>Description: {weatherData?.weather[0].description}</p>
+          <p>Feels Like: {weatherData?.main.feels_like}</p>
+          <p>Humidity: {weatherData?.main.humidity}</p>
+          <p>Wind Speed: {weatherData?.wind.speed}</p>
+          <div>
+            {weatherData?.weather.map((item, index) => (
+              <div className="bg-gray-700 p-4" key={index}>
+                <p>Main: {item.main}</p>
+                <p>Description: {item.description}</p>
+                <img className="w-32" src={`https://openweathermap.org/img/w/${item.icon}.png`} alt={item.description} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
