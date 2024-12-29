@@ -1,12 +1,12 @@
 import axios from "axios";
-import type { Location, WeatherData } from "../../types";
+import type { AirQualityDataType, Location, WeatherData } from "../../types";
 
-//
-export const fetchWeatherInfo = async (locations: Location[], apiKey: string): Promise<WeatherData[]> => {
+export const getAirQualityIndex = async (locations: Location[]): Promise<AirQualityDataType[]> => {
+  const apiKey = import.meta.env.VITE_APP_API_KEY;
   try {
     const responses = await Promise.all(
       locations.map(async location => {
-        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${apiKey}&units=metric`; // Correct URL
+        const url = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${location.latitude}&lon=${location.longitude}&appid=${apiKey}&units=metric`; // Correct URL
         console.log("Fetching URL:", url);
         const response = await fetch(url);
 
@@ -24,12 +24,3 @@ export const fetchWeatherInfo = async (locations: Location[], apiKey: string): P
     throw error; // Important: Re-throw the error
   }
 };
-
-export interface detailLocation {
-  name: string | undefined;
-}
-
-export async function FetchDetailWeather(locations: string | undefined, apiKey: string): Promise<WeatherData> {
-  const response = await axios.get<WeatherData>(`https://api.openweathermap.org/data/2.5/weather?q=${locations}&appid=${apiKey}`);
-  return response.data;
-}

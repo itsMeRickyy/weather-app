@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { create } from "zustand";
 import { fetchWeatherInfo } from "~/services/fetchWeather";
-import type { Location, WeatherData } from "~/services/fetchWeather";
+import type { Location, WeatherData, AirQualityDataType } from ".././types";
 import axios from "axios";
 import { detectUserLocation, searchLocation } from "utils/locationUtils";
+import { getAirQualityIndex } from "~/services/getAirQuality";
 
 interface WeatherState {
   // locations: Location[];
@@ -18,6 +19,7 @@ interface WeatherState {
   searchLocation: (query: string) => Promise<void>;
   searchError: string | null;
   isLoading: boolean;
+  airQualityData: AirQualityDataType | null;
 }
 
 // const apiKey = process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY;
@@ -41,6 +43,7 @@ const useWeatherStore = create<WeatherState>((set, get) => ({
   locationError: null,
   searchError: null,
   isLoading: false,
+  airQualityData: null,
   fetchWeatherData: async (location: Location) => {
     const apiKey = import.meta.env.VITE_APP_API_KEY;
     if (!apiKey) {
@@ -49,7 +52,9 @@ const useWeatherStore = create<WeatherState>((set, get) => ({
     }
     try {
       const response = await fetchWeatherInfo([location], apiKey);
-      set({ weatherData: response, isLoading: false });
+      // const airQualityResponse = await axios.get<AirQualityDataType>(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${location.latitude}&lon=${location.longitude}&appid=${apiKey}&units=metric`);
+      const airQualityResponse = await getAirQualityIndex([location]);
+      set({ weatherData: response, airQualityData: airQualityResponse[0], isLoading: false });
       console.log("This is Weather Data", response);
     } catch (error) {
       console.error("Error fetch weather data:", error);

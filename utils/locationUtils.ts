@@ -1,33 +1,33 @@
-import type { Location } from "~/services/fetchWeather";
+import type { Location, WeatherData } from ".././types";
 
-export interface WeatherData {
-  name: string;
-  id: number;
-  temperature: number;
-  description: string;
-  latitude: number;
-  longitude: number;
-  main: {
-    temp: number;
-    humidity: number;
-    feels_like: number;
-    pressure: number;
-  };
-  weather: [
-    {
-      main: string;
-      description: string;
-      icon: string;
-    }
-  ];
-  wind: {
-    speed: number;
-    deg: number;
-  };
-  clouds: {
-    all: number;
-  };
-}
+// export interface WeatherData {
+//   name: string;
+//   id: number;
+//   temperature: number;
+//   description: string;
+//   latitude: number;
+//   longitude: number;
+//   main: {
+//     temp: number;
+//     humidity: number;
+//     feels_like: number;
+//     pressure: number;
+//   };
+//   weather: [
+//     {
+//       main: string;
+//       description: string;
+//       icon: string;
+//     }
+//   ];
+//   wind: {
+//     speed: number;
+//     deg: number;
+//   };
+//   clouds: {
+//     all: number;
+//   };
+// }
 
 export const detectUserLocation = async (): Promise<Location | null> => {
   if (!navigator.geolocation) {
@@ -102,15 +102,37 @@ export const searchLocation = async (query: string): Promise<WeatherData | null>
 
     return {
       name: firstResult.display_name,
+      id: firstResult.place_id,
+      temperature: 0, // Placeholder value
       latitude: firstResult.lat,
       longitude: firstResult.lon,
-      id: firstResult.place_id,
-      temperature: 0,
-      description: "",
-      main: { temp: 0, humidity: 0, feels_like: 0, pressure: 0 },
-      weather: [{ main: "", description: "", icon: "" }],
-      wind: { speed: 0, deg: 0 },
-      clouds: { all: 0 },
+      main: {
+        temp: 0, // Placeholder value
+        humidity: 0, // Placeholder value
+        feels_like: 0, // Placeholder value
+        pressure: 0, // Placeholder value
+      },
+      weather: [
+        {
+          main: "", // Placeholder value
+          description: "", // Placeholder value
+          icon: "", // Placeholder value
+        },
+      ],
+      wind: {
+        speed: 0, // Placeholder value
+        deg: 0, // Placeholder value
+      },
+      clouds: {
+        all: 0, // Placeholder value
+      },
+      visibility: 0, // Placeholder value
+      dt: 0, // Placeholder value
+      sys: {
+        country: "", // Placeholder value
+        sunrise: 0, // Placeholder value
+        sunset: 0, // Placeholder value
+      },
     };
   } catch (searchLocationError) {
     console.error("Error search location:", searchLocationError);
