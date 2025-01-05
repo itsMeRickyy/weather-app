@@ -1,0 +1,7 @@
+.highlightsSwiper SwiperSlide {
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+  background-color: aqua;
+  height: 100%;
+}

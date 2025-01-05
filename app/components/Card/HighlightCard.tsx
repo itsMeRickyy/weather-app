@@ -10,10 +10,10 @@ function HighlightCard({ children, title, status }: HighlightCardProps) {
   const { toggle } = useStore();
 
   return (
-    <div className={toggle ? `w-52 h-48 rounded-2xl bg-darkMode-200 text-white flex flex-col gap-5 justify-between p-5 ` : `w-52 h-48 rounded-2xl bg-white flex flex-col gap-5 justify-between p-5 text-gray-700`}>
-      <h1 className="text-slate-400">{title}</h1>
+    <div className={`${toggle ? `bg-darkMode-200 text-white  ` : ` bg-white text-gray-700`} w-40 h-36 lg:w-44 lg:h-40  rounded-2xl xl:w-52 xl:h-48 lg:rounded-2xl flex flex-col gap-3 lg:gap-5 justify-between p-5`}>
+      <h1 className="text-slate-400 text-sm md:text-md">{title}</h1>
       {children}
-      <h1>{status}</h1>
+      <h1 className="text-sm bg bg-green-100">{status}</h1>
     </div>
   );
 }

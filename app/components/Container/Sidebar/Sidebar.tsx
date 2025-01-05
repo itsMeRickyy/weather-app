@@ -3,6 +3,7 @@ import useWeatherStore, { useWeather } from "store/useWeatherDataStore";
 import SearchBar from "./SearchBar";
 import { useStore } from "store/useStore";
 import Header from "~/components/Header/Header";
+import Highlights from "../Highlights/Highlights";
 
 function Sidebar() {
   const { weatherData, detectUserLocation, userLocation } = useWeatherStore();
@@ -89,7 +90,7 @@ function Sidebar() {
 
   return (
     <div>
-      <div className={` ${toggle ? `bg-darkMode-300 text-white ` : `bg-white text-gray-700 `} flex flex-col gap-10 h-screen p-4 px-14`}>
+      <div className={` ${toggle ? `bg-darkMode-300 text-white ` : `sm:bg-white text-gray-700 `} flex flex-col gap-10 min-h-screen h-full pt-2 px-2 sm:px-14 sm:w-[350px] w-screen`}>
         <div className="flex justify-between items-center gap-5">
           <SearchBar />
           <div className="sm:hidden">
@@ -119,7 +120,7 @@ function Sidebar() {
         </div>
         <div className="flex flex-col gap-10 h-full">
           {weatherData && weatherData.length > 0 ? (
-            <div className="flex flex-col ">
+            <div className="flex flex-col px-5">
               <div className="flex items-center">
                 <h1 className="text-xl">{weatherStatus()}</h1>
               </div>
@@ -130,11 +131,11 @@ function Sidebar() {
               {/* Render other weather properties as needed */}
             </div>
           ) : (
-            <div className="h-20 rounded-md text-2xl w-full flex items-center justify-center p-3">
+            <div className="h-20 rounded-md  text-2xl flex items-center justify-center p-3">
               <p>Loading...</p>
             </div>
           )}
-          <div className="flex gap-2 p-7 h-full">
+          <div className="flex  gap-2 p-7 ">
             {weatherData && weatherData.length > 0 ? (
               <div className={toggle ? `bg-darkMode-200 text-white h-20 rounded-md text-2xl w-full flex items-center justify-center p-3` : `h-20 rounded-md text-2xl bg-gray-200 w-full flex items-center justify-center p-3`}>
                 <h2>{weatherData[0].name.substring(0, 10)}</h2>
@@ -142,6 +143,11 @@ function Sidebar() {
             ) : (
               <></>
             )}
+          </div>
+          <div>
+            <div className="sm:hidden pb-5 gap-3 ">
+              <Highlights />
+            </div>
           </div>
         </div>
       </div>

@@ -6,6 +6,6 @@ interface Store {
 }
 
 export const useStore = create<Store>(set => ({
-  toggle: true,
+  toggle: false,
   setToggle: (toggle: boolean) => set({ toggle }),
 }));

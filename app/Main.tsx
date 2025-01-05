@@ -7,9 +7,9 @@ import Header from "./components/Header/Header";
 function Main() {
   const { toggle } = useStore();
   return (
-    <div className={`${toggle ? `bg-darkMode-100 ` : `bg-gray-100 `} sm:overflow-y-scroll sm:overflow-x-hidden h-screen`} id="main">
+    <div className={`${toggle ? `bg-darkMode-100 ` : `bg-gray-100 `} overflow-y-scroll overflow-x-hidden min-h-screen h-full`} id="main">
       <div className="flex gap-10 w-full">
-        <div className="absolute right-10 top-5 hidden sm:block">
+        <div className="absolute right-10 top-4 hidden sm:block z-20">
           <Header />
         </div>
         <Sidebar />
