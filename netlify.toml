@@ -1,10 +1,6 @@
 [build]
-  command = "npm run build"
-  publish = "dist"
-  base = "."
+command = "react-router build"
+publish = "build/client"
 
-[build.environment]
-  NODE_ENV = "production"
-
-[[plugins]]
-  package = "@netlify/plugin-react-router"
+[dev]
+command = "react-router dev"
