@@ -6,6 +6,7 @@ import { SwiperSlide, Swiper } from "swiper/react";
 function WeekForecast() {
   const { week } = weekForecast;
   const { toggle } = useStore();
+  const generateId = () => Math.floor(Math.random() * 1000);
 
   return (
     <div className=" w-[31vw]  md:w-[50vw] lg:w-[57vw] xl:w-[60vw]  relative flex flex-col gap-8">
@@ -43,8 +44,8 @@ function WeekForecast() {
           }}
           className="mySwiper ">
           {week.map(day => (
-            <SwiperSlide>
-              <WeekForecastCard key={day.day} day={day.day.substring(0, 3)} icon={day.icon} temp={`${day.temperature.min} ° - ${day.temperature.max} °`} />
+            <SwiperSlide key={generateId()}>
+              <WeekForecastCard day={day.day.substring(0, 3)} icon={day.icon} temp={`${day.temperature.min} ° - ${day.temperature.max} °`} />
             </SwiperSlide>
           ))}
         </Swiper>
