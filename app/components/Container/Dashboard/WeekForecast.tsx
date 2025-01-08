@@ -44,7 +44,7 @@ function WeekForecast() {
           className="mySwiper ">
           {week.map(day => (
             <SwiperSlide>
-              <WeekForecastCard key={day.day} day={day.day.substring(0, 3)} icon={day.icon} temp={`${day.temperature.min} - ${day.temperature.max}`} />
+              <WeekForecastCard key={day.day} day={day.day.substring(0, 3)} icon={day.icon} temp={`${day.temperature.min} ° - ${day.temperature.max} °`} />
             </SwiperSlide>
           ))}
         </Swiper>

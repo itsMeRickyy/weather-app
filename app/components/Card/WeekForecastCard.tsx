@@ -17,7 +17,7 @@ function WeekForecastCard({ day, icon, temp, children }: cardProps) {
       {/* <img src={icon} alt="weather icon" /> */}
       <div className="text-4xl">{icon}</div>
       {children}
-      <h1>{temp}</h1>
+      <h1 className="text-xs">{temp}</h1>
     </div>
   );
 }
