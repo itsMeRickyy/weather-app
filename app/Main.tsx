@@ -12,6 +12,7 @@ function Main() {
         <div className="absolute right-10 top-4 hidden sm:block z-20">
           <Header />
         </div>
+        {/* sidebar */}
         <Sidebar />
         <div className="hidden sm:block">
           <Dashboard />
