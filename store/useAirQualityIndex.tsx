@@ -1,11 +1,11 @@
 import { create } from "zustand";
 import { getAirQualityIndex } from "~/services/getAirQuality";
-import type { Location, WeatherData } from ".././types";
+import type { AirQualityDataType, Location, WeatherData } from ".././types";
 import useWeatherStore from "./useWeatherDataStore";
 import { useEffect } from "react";
 
 interface AirQualityIndexState {
-  airQualityIndex: WeatherData[] | null;
+  airQualityIndex: AirQualityDataType[] | null;
   isLoading: boolean;
   fetchAirQuality: (locations: Location[], apiKey: string) => Promise<void>;
 }
@@ -17,7 +17,7 @@ export const useAirQualityIndex = create<AirQualityIndexState>((set, get) => ({
   fetchAirQuality: async (locations: Location[]) => {
     set({ isLoading: true });
     const response = await getAirQualityIndex(locations);
-    set({ airQualityIndex: response, isLoading: false });
+    set({ airQualityIndex: response as AirQualityDataType[], isLoading: false });
   },
 }));
 
