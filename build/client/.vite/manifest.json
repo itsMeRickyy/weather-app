@@ -1,0 +1,52 @@
+{
+  "H:/Latihan Web Dev/Belajar ReactJS/Weather-app-project/app/app.css": {
+    "file": "assets/app-DN0K4wyy.css",
+    "src": "H:/Latihan Web Dev/Belajar ReactJS/Weather-app-project/app/app.css"
+  },
+  "_chunk-D52XG6IA-ChLflW2D.js": {
+    "file": "assets/chunk-D52XG6IA-ChLflW2D.js",
+    "name": "chunk-D52XG6IA"
+  },
+  "_with-props-BuTW7FIh.js": {
+    "file": "assets/with-props-BuTW7FIh.js",
+    "name": "with-props",
+    "imports": [
+      "_chunk-D52XG6IA-ChLflW2D.js"
+    ]
+  },
+  "app/root.tsx?route-entry=1": {
+    "file": "assets/root-CCqrRgU0.js",
+    "name": "root",
+    "src": "app/root.tsx?route-entry=1",
+    "isEntry": true,
+    "imports": [
+      "_with-props-BuTW7FIh.js",
+      "_chunk-D52XG6IA-ChLflW2D.js"
+    ],
+    "assets": [
+      "assets/app-DN0K4wyy.css"
+    ]
+  },
+  "app/routes/home.tsx?route-entry=1": {
+    "file": "assets/home-uWzf5V4g.js",
+    "name": "home",
+    "src": "app/routes/home.tsx?route-entry=1",
+    "isEntry": true,
+    "imports": [
+      "_with-props-BuTW7FIh.js",
+      "_chunk-D52XG6IA-ChLflW2D.js"
+    ],
+    "css": [
+      "assets/home-DPd3d4l0.css"
+    ]
+  },
+  "node_modules/@react-router/dev/dist/config/defaults/entry.client.tsx": {
+    "file": "assets/entry.client-gV2k_UUR.js",
+    "name": "entry.client",
+    "src": "node_modules/@react-router/dev/dist/config/defaults/entry.client.tsx",
+    "isEntry": true,
+    "imports": [
+      "_chunk-D52XG6IA-ChLflW2D.js"
+    ]
+  }
+}
