@@ -3,13 +3,13 @@
     "file": "assets/app-DN0K4wyy.css",
     "src": "H:/Latihan Web Dev/Belajar ReactJS/Weather-app-project/app/app.css"
   },
-  "virtual:react-router/server-build": {
-    "file": "index.js",
-    "name": "server-build",
-    "src": "virtual:react-router/server-build",
+  "virtual:netlify-server": {
+    "file": "server.js",
+    "name": "server",
+    "src": "virtual:netlify-server",
     "isEntry": true,
     "css": [
-      "assets/server-build-DPd3d4l0.css"
+      "assets/server-DPd3d4l0.css"
     ],
     "assets": [
       "assets/app-DN0K4wyy.css"
