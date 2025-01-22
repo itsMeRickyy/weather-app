@@ -1,6 +1,6 @@
 [build]
-command = "vite build"
+command = "react-router build"
 publish = "dist"
 
 [dev]
-command = "vite"
+command = "react-router dev"
